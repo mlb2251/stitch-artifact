@@ -1,9 +1,12 @@
 [submodule "stitch"]
 	path = stitch
 	url = https://github.com/mlb2251/stitch.git
+	branch = main
 [submodule "stitch_experiments"]
 	path = stitch_experiments
 	url = https://github.com/mlb2251/stitch.git
+	branch = experiments
 [submodule "stitch_ablations"]
 	path = stitch_ablations
 	url = https://github.com/mlb2251/stitch.git
+	branch = ablation_experiments
