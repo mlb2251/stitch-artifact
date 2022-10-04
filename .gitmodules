@@ -10,3 +10,7 @@
 	path = stitch_ablations
 	url = https://github.com/mlb2251/stitch.git
 	branch = ablation_experiments
+[submodule "pystitch"]
+	path = pystitch
+	url = https://github.com/ellisk42/ec.git
+	branch = pystitch-artifact
