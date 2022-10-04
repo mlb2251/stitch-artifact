@@ -1,0 +1,9 @@
+[submodule "stitch"]
+	path = stitch
+	url = https://github.com/mlb2251/stitch.git
+[submodule "stitch_experiments"]
+	path = stitch_experiments
+	url = https://github.com/mlb2251/stitch.git
+[submodule "stitch_ablations"]
+	path = stitch_ablations
+	url = https://github.com/mlb2251/stitch.git
