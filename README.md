@@ -103,17 +103,33 @@ make test
 ```
 
 
-Try out PyStitch (Runtime: 4.5 min; Memory: 1.5G) **todo convert to makefile**
+The following command tets out the prototype PyStitch (Runtime: 4.5 min; Memory: 1.5GB)
 ```
 cd stitch-artifact/pystitch
 make test-1
 ```
+The end of the output should look like:
+```
+new primitives:
+list(t0) -> (list(t0) -> t1) -> (t1 -> list(t0)) -> list(t0) 	 #(lambda (lambda (lambda (#(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2))))) ($0 ($1 (cdr $2))) (car $2) $2))))
+int -> int 	 #(- 0)
+int -> int 	 #(+ 1)
+(t0 -> t1) -> list(t0) -> list(t1) 	 #(lambda (#(lambda (lambda (fix1 $0 $1))) (lambda (lambda (#(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2))))) ($1 (cdr $0)) ($2 (car $0)) $0)))))
+(t0 -> t1 -> t1) -> t1 -> list(t0) -> t1 	 #(lambda (lambda (#(lambda (lambda (fix1 $0 $1))) (lambda (lambda (if (empty? $0) $2 ($3 (car $0) ($1 (cdr $0)))))))))
+(int -> int -> int) -> (int -> t0) -> int -> list(t0) 	 #(lambda (lambda (#(lambda (lambda (fix1 $0 $1))) (lambda (lambda (if (eq? 0 $0) empty (cons ($2 $0) ($1 ($3 $0 1)))))))))
+((t0 -> t1) -> t0 -> t1) -> t0 -> t1 	 #(lambda (lambda (fix1 $0 $1)))
+list(t0) -> t0 -> list(t1) -> list(t0) 	 #(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2)))))
+202.89716243743896 seconds
+```
 
-Try out PyStitch with rewrites **todo runtime mem**
+The following command will only work if you have 14 GB of RAM and is more of a stress test of the full functionality of pystitch (12 min; 14GB)
 ```
 cd stitch-artifact/pystitch
 make test-2
 ```
+
+Expected output should look similar to the make test-1 though not identical .
+
 
 # Evaluation instructions
 
@@ -242,6 +258,9 @@ make clean
 ```
 ./analyze.sh
 ```
+
+
+
 
 # Additional artifact description
 
