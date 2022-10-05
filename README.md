@@ -117,7 +117,7 @@ View the following plots in `stitch/experiments/plots` to verify that they align
 Variation in results: we expect that on some machines Fig 3 (wall-clock time) may be slower when run in a VM.
 
 ## Claim 2
-Claim 2 involves running 50 random seeds and averaging over the results. Each seed takes about 2 minutes to run, so the full runtime is around 100 minutes. We give instructions below for configuring the number of seeds to run as well as providing logs for the full 50 seed run.
+Claim 2 involves running 50 random seeds and averaging over the results. Each seed takes about 3 minutes to run, so the full runtime is around 150 minutes. We give instructions below for configuring the number of seeds to run as well as providing logs for the full 50 seed run.
 
 ### Running Claim 2
 
@@ -130,7 +130,7 @@ make claim-2
 
 In the paper we provide means and standard deviations across many seeds - in particular we ran it with 50 seeds. To recreate this you can repeat the above procedure but replacing `export NUM_SEEDS=1` with `export NUM_SEEDS=50` or whatever number of repetitions is desired.
 
-- Runtime requirement: 2 min * NUM_SEEDS (i.e. varies from 6 min to 100 min).
+- Runtime requirement: 3 min * NUM_SEEDS (i.e. ranges from 9 min to 150 min).
 - Memory requirement: 1 GB (expected peak at around 800MB).
 - Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively. **todo make the log for -50**
 - Comments:
