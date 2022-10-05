@@ -29,41 +29,22 @@ python3 -m pip install numpy matplotlib pandas seaborn prettytable
 
 Ensure that `/usr/bin/time` is installed - note that this is different from the `time` bash builtin. Check that running `/usr/bin/time` prints a "Usage:" explanation.
 
-## Download stitch
+## Download stitch artifact
+While Stitch itself is fairly small, for the PyStitch extension we need to include the DreamCoder repo (~4GB) so this will be a large download.
 ```
-git clone https://github.com/mlb2251/stitch.git
-cd stitch
-git checkout artifact-main
-export STITCH_DIR=$PWD
-```
-The benchmark repo should be cloned *inside* of the stitch directory, as the instructions above imply.
-
-You may want to add `export STITCH_DIR=path/to/stitch` to your `.bashrc` as this is used by many analysis scripts.
-
-## Download PyStitch
-**PyStitch is only used in Claim 5, and while Stitch itself is likely easy to run on any machine if the dependencies can be installed, PyStitch inherits many DreamCoder dependencies that make it far more difficult to run - so we highly recommend using a VM for Claim 5 instead of installing PyStitch yourself**.
-
-While Stitch will be used for most of our experiments, as per the paper PyStitch is a "prototype" implementation of Stitch merged with DreamCoder to "give evidence that it is possible to make Stitch recover almost all of these higher-order functions by layering it on top of version space obtained after a single step of
-DreamCoder’s 𝛽-reduction-inverting refactoring". 
-
-PyStitch lives in the DreamCoder repo which is large (~4GB) so this clone will take a while:
-```
-git clone -b pystitch-artifact https://github.com/ellisk42/ec.git pystitch
-cd pystitch
+git clone https://github.com/mlb2251/stitch-artifact.git
+cd stitch-artifact
 git submodule update --recursive --init
 ```
 
-Running PyStitch requires pypy3
+## PyStitch prerequisites
+**PyStitch is only used in Claim 5, and while Stitch itself is likely easy to run on any machine if the dependencies can be installed, PyStitch inherits many DreamCoder dependencies that make it far more difficult to run - so we highly recommend using a VM for Claim 5 instead of installing PyStitch yourself**.
+
+We recommend using the VM for this as DreamCoder is notoriously difficult to get running across different platforms. However, we include the procedure we used to get it running ourselves here:
 ```
-sudo add-apt-repository ppa:pypy/ppa
-sudo apt update
 sudo apt install pypy3
-sudo apt-get install python3-pip
-
+sudo apt install python3-pip
 pypy3 -m pip install frozendict dill
-
-
-
 ```
 
 
@@ -96,12 +77,9 @@ pypy3 bin/sasquatch.py -v -a 1 -i -t --iteration 0
 ## Claim 1
 Expected time: <10 min.
 
-From the root of the stitch repo, run:
+From the root of the stitch-artifact repo, run:
 ```
-export STITCH_DIR=$PWD
-git checkout artifact-main
-cd experiments
-git clone https://github.com/mlb2251/compression_benchmark.git
+cd stitch/experiments
 make claim-1
 ```
 
@@ -117,12 +95,9 @@ We expect that on some machines Fig 3 (wall-clock time) may be slower when run i
 ## Claim 2
 Expected time: ~2 min per run; paper performs 50 runs but below we first give the instruction for a single run while providing the logs for all 50 runs as well as instructions on how to run them if desired (~100 min).
 
-
-First we will run with only a single random seed. From the root of the stitch repo, run:
+First we will run with only a single random seed. From the root of the stitch-artifact repo, run:
 ```
-export STITCH_DIR=$PWD
-git checkout artifact-experiments
-cd experiments
+cd stitch_experiments/experiments
 export NUM_SEEDS=1
 make claim-2
 ```
@@ -137,10 +112,9 @@ Results:
 ## Claim 3
 Runtime: <10 min
 
-From the root of the stitch repo, run:
+From the root of the stitch-artifact repo, run:
 ```
-git checkout artifact-experiments
-cd experiments
+cd stitch_experiments/experiments
 make claim-3
 ```
 
@@ -149,20 +123,16 @@ Results:
 
 ## Claim 4
 Runtime: ~20 hours to re-run the ablation study and requires 50GB of RAM; we provide full logs from running it ourselves as well as instructions on how to re-run it.
-From the root of the stitch repo, run:
+From the root of the stitch-artifact repo, run:
 ```
-export STITCH_DIR=$PWD
-git checkout artifact-ablation_experiments
-cd experiments
+cd stitch_ablations/experiments
 make claim-4
 ```
 
 ## Claim 5
-
+From the root of the stitch-artifact repo, run:
 ```
-export STITCH_DIR=$PWD
-git checkout
-cd experiments
+cd pystitch/experiments
 make claim-5
 ```
 
