@@ -260,6 +260,18 @@ make clean
 ```
 
 
+## Appendix: Rerunning DC Baselines
+
+We'll need an extra dependency for this
+```
+sudo apt install libzmq3-dev
+```
+
+To re-run everything, which requires 100GB memory and takes ~1 day on 8 cores outside of a VM:
+```
+cd stitch-artifact/stitch/experiments
+make dreamcoder
+```
 
 
 # Additional artifact description
