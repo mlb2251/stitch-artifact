@@ -14,3 +14,4 @@
 	path = pystitch
 	url = https://github.com/ellisk42/ec.git
 	branch = pystitch-artifact
+	shallow = true
