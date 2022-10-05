@@ -8,32 +8,56 @@ Additionally a VirtualBox VM image is available at the Zenodo link above.
 
 # List of Claims
 This artifact evaluates the following claims:
-- Claim 1: Stitch learns libraries of comparable quality to those found by existing deductive library learning algorithms in prior work, while requiring significantly less resources (Fig 6, Fig 7, Fig 8).
-- Claim 2: Stitch scales to corpora of programs that contain more and longer programs than would be tractable with prior work (Table 1, Table 2).
-- Claim 3: Stitch degrades gracefully when resource-constrained (Fig 9).
-- Claim 4: All the elements of Stitch matter (Table 3).
-- Claim 5: Stitch is complementary to deductive rewrite-based approaches to library learning (Table 4).
+- Claim 1:
+  - Stitch learns libraries of comparable quality to those found by existing deductive library learning algorithms in prior work, while requiring significantly less resources.
+  - Paper Section: 6.1
+  - Figures: Fig 6, Fig 7, Fig 8.
+  - Evaluated in: "Claim 1" section below
+- Claim 2:
+  - Stitch scales to corpora of programs that contain more and longer programs than would be tractable with prior work (Table 1, Table 2).
+  - Paper Section: 6.2
+  - Tables: Table 1, Table 2
+  - Evaluated in: "Claim 2" section below
+- Claim 3:
+  - Stitch degrades gracefully when resource-constrained (any-time algorithm study).
+  - Paper Section: 6.3
+  - Figures: Fig 9.
+  - Evaluated in: "Claim 3" section below
+- Claim 4:
+  - All the elements of Stitch matter (ablation study).
+  - Paper Section: 6.4
+  - Tables: Table 3.
+  - Evaluated in: "Claim 4" section below
+- Claim 5:
+  - Stitch is complementary to deductive rewrite-based approaches to library learning (The "PyStitch" prototype).
+  - Paper Section: 6.5
+  - Tables: Table 4.
+  - Evaluated in: "Claim 5" section below
 
 # Download, installation, and sanity-testing instructions
 
 We provide both VM Setup and Non-VM Setup instructions below. While the tool `stitch` (i.e. Claims 1-4) has minimal dependencies, the PyStitch prototype presented in Claim 5 may require a VM due to DreamCoder dependencies. All claims can be evaluated through the VM for simplicity if preferred.
 
-## Memory Requirements
+## Memory Requirements (RAM)
 
-**todo**
+- Claim 1: <1 GB
+- Claim 2: <1 GB
+- Claim 3: <1 GB
+- Claim 4: 50 GB (we provide full logs of a successful 20 hour run of this ablation study as an additional alternative)
+- Claim 5: 20 GB (we provide full logs of successful runs)
 
 ## VM Setup
 
 Download the `.ova` VM image from the artifact Zenodo link.
 
-Download VirtualBox 6 and import the file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements" section above.
+Download VirtualBox 6 and import the file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements" section above - the defaults are *not* enough to run every experiment.
 
 VM Info:
 - Ubuntu 20.04
 - Username: `artifact`
 - Password: `artifact`
-- Artifact repo is at **todo path to repo**
-- All dependencies are pre-installed
+- Artifact repo is at `/home/artifact/stitch-artifact`
+- All dependencies are pre-installed and `stitch` is pre-compiled
 
 ## Non-VM Setup
 
@@ -52,18 +76,19 @@ Ensure that GNU time (i.e. `/usr/bin/time`) is installed - note that this is dif
 
 ### Install the `stitch` artifact
 
-Clone recursively to get submodules
+**todo make stitch-artifact.zip**
+Unzip `stitch-artifact.zip` from the Zenodo link into a new folder `stitch-artifact`,  or alternatively clone `stitch-artifact` from github as follows:
 ```
 git clone --recursive  https://github.com/mlb2251/stitch-artifact.git
 ```
 If you did a normal clone without `--recursive`, run `git submodules update --init --recursive` to update the submodules.
 
 ### Install PyStitch dependencies (Claim 5 only)
-PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any issues are encountered running it outside of a VM, we recommend using a VM for simplicity given the dependence on DreamCoder. PyStitch requires Linux.
+PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any issues are encountered running it outside of a VM, we recommend using a VM for simplicity.
 
 Running PyStitch on a fresh installation of Ubuntu 20.04 LTS requires the following dependencies:
 ```
-sudo apt install git curl python3-pip pypy3 python3-pip
+sudo apt install python3-pip pypy3
 pypy3 -m pip install frozendict dill
 ```
 
@@ -81,13 +106,13 @@ make test
 Try out PyStitch (Runtime: 4.5 min; Memory: 1.5G) **todo convert to makefile**
 ```
 cd stitch-artifact/pystitch
-pypy3 bin/sasquatch.py -v -a 0 -i -t --iteration 0
+make test-1
 ```
 
 Try out PyStitch with rewrites **todo runtime mem**
 ```
 cd stitch-artifact/pystitch
-pypy3 bin/sasquatch.py -v -a 1 -i -t --iteration 0
+make test-2
 ```
 
 # Evaluation instructions
@@ -121,7 +146,7 @@ Claim 2 involves running 50 random seeds and averaging over the results. Each se
 
 ### Running Claim 2
 
-First we will run with averaging over only 3 random seeds. From the root of the stitch-artifact repo, run:
+First we will run with averaging over only 3 random seeds. From the root of the stitch-artifact repo, run the following (note the different `cd` path):
 ```
 cd stitch-artifact/stitch_experiments/experiments
 export NUM_SEEDS=3
@@ -132,7 +157,7 @@ In the paper we provide means and standard deviations across many seeds - in par
 
 - Runtime requirement: 3 min * NUM_SEEDS (i.e. ranges from 9 min to 150 min).
 - Memory requirement: 1 GB (expected peak at around 800MB).
-- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively. **todo make the log for -50**
+- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-2` will clear these outputs before re-running.
   - `make claim-2-viz` will execute just the table-making code for `claim-2` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -170,7 +195,7 @@ This claim is the ablation study. The ablation study takes about 20 hours to re-
 ### Validating Claim 4 with pre-run results
 
 Pre-run files and logs:
-- `stitch-artifact/stitch_ablations/experiments/` is the parent folder for all the following files...
+- `stitch-artifact/stitch_ablations/experiments/` is the parent folder for all the following files (note the difference from earlier paths in this guide).
 - `claim-4-out` contains the output from running the ablation study. This includes subfolder `stdout` with the logs of what stitch printed during each ablation run, as well as the subfolder `raw` which includes the jsons that stitch outputted with results from each run.
 - `expected-claim-4-out` is a backup of `claim-4-out` (in case `make clean` or `make claim-4` is run which would overwrite the other copy).
 - `make-claim-4-viz.log` is a log of the output from running `make claim-4-viz`.
@@ -206,13 +231,17 @@ This will overwrite the pre-run files. Proceed to the same data analysis used du
 
 From the root of the stitch-artifact repo, run:
 ```
-cd stitch-artifact/pystitch/experiments
-make claim-5
+cd stitch-artifact/pystitch
+make clean
+./claim-5.sh
 ```
 
+113 min
+
 ### Validating Claim 5
-
-
+```
+./analyze.sh
+```
 
 # Additional artifact description
 
