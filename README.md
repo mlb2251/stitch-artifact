@@ -1,6 +1,6 @@
-**ATTENTION**: the README in the VM at `/home/artifact/stitch-artifact/README.md` may be slightly outdated due to various tweaks or additions that aren't worth re-exporting and re-uploading and re-testing the VM image (e.g. adding "Additional Artifact Description" and tweaking some instructions for ease of use). So please either `git pull` the changes into the VM or just use any of the other copies of the README (i.e. this one; the one in the base directory of Zenodo; the one in stitch-artifact.zip on Zenodo; or the one on the Github). Sorry for the inconvenience and thank you for helping review!
+**Please Note**: the README in the VM at `/home/artifact/stitch-artifact/README.md` is slightly outdated due to various tweaks or additions, including clarifying parts of the instructions and providing the "Additional Artifact Description". So for a smooth evaluation please either `git pull` the changes into the VM or just use any of the other copies of the README: the copy you're reading now; or the one in the base directory of Zenodo; or the one in stitch-artifact.zip on Zenodo; or the one on the [official artifact Github](https://github.com/mlb2251/stitch-artifact/). Sorry for the inconvenience and thank you for helping review!
 
-POPL 2023 Artifact for the tool `stitch` from the paper "Top-Down Synthesis for Library Learning" (POPL 2023 Submission #278).
+This is the POPL 2023 Artifact for the tool `stitch` from the paper "Top-Down Synthesis for Library Learning" (Submission #278).
 
 This artifact can be downloaded from either of two places:
 - Zenodo: https://zenodo.org/record/7150898
@@ -9,36 +9,36 @@ This artifact can be downloaded from either of two places:
 Additionally a VirtualBox VM image is available at the Zenodo link above.
 
 # List of Claims
-This artifact evaluates the following claims:
+This artifact evaluates the following claims, taken verbatim from the start of Section 6:
 - Claim 1:
-  - Stitch learns libraries of comparable quality to those found by existing deductive library learning algorithms in prior work, while requiring significantly less resources.
+  - "Stitch learns libraries of comparable quality to those found by existing deductive library learning algorithms in prior work, while requiring significantly less resources." (Comparison of Stitch to DreamCoder)
   - Paper Section: 6.1
   - Figures: Fig 6, Fig 7, Fig 8.
   - Evaluated in: "Claim 1" section below
 - Claim 2:
-  - Stitch scales to corpora of programs that contain more and longer programs than would be tractable with prior work (Table 1, Table 2).
+  - "Stitch scales to corpora of programs that contain more and longer programs than would be tractable with prior work" (benchmarking Stitch on Wong et al. 2022 dataset and presenting results).
   - Paper Section: 6.2
   - Tables: Table 1, Table 2
   - Evaluated in: "Claim 2" section below
 - Claim 3:
-  - Stitch degrades gracefully when resource-constrained (any-time algorithm study).
+  - "Stitch degrades gracefully when resource-constrained" (any-time algorithm study).
   - Paper Section: 6.3
   - Figures: Fig 9.
   - Evaluated in: "Claim 3" section below
 - Claim 4:
-  - All the elements of Stitch matter (ablation study).
+  - "All the elements of Stitch matter" (ablation study).
   - Paper Section: 6.4
   - Tables: Table 3.
   - Evaluated in: "Claim 4" section below
 - Claim 5:
-  - Stitch is complementary to deductive rewrite-based approaches to library learning (The "PyStitch" prototype).
+  - "Stitch is complementary to deductive rewrite-based approaches to library learning" (The "PyStitch" prototype).
   - Paper Section: 6.5
   - Tables: Table 4.
   - Evaluated in: "Claim 5" section below
 
 # Download, installation, and sanity-testing instructions
 
-We provide both VM Setup and Non-VM Setup instructions below. While the tool `stitch` (i.e. Claims 1-4) has minimal dependencies, the PyStitch prototype presented in Claim 5 has slightly more dependencies and might be easier run in a VM if desired. All claims can also be evaluated through the VM for simplicity preferred.
+We provide both VM Setup and Non-VM Setup instructions below. While the tool `stitch` (i.e. Claims 1-4) has minimal dependencies, the PyStitch prototype presented in Claim 5 has slightly more dependencies and might be easier run in a VM if issues are encountered. All claims can also be evaluated through the VM for simplicity preferred.
 
 ## Memory Requirements (RAM)
 
@@ -50,9 +50,14 @@ We provide both VM Setup and Non-VM Setup instructions below. While the tool `st
 
 ## VM Setup
 
+**Please refer to the note at the top of this document about how the README in the VM is outdated - thank you!**
+
 Download the `.ova` VM image from the artifact [Zenodo link](https://zenodo.org/record/7150898).
 
-Download VirtualBox 6.1 (tested on 6.1.38), import the `ova` file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements (RAM)" section above - the defaults are *not* enough to run every experiment; also note that 8 cores are necessary if you want to re-run DreamCoder baselines (given as an Appendix) but the rest of the experiments are fine on 1 core. 4GB of memory and 1 CPU is enough to run all of the primary experiments, and more is only needed if you opt out of using the logged versions of ablation experiments (Claim 4) and prototype (Claim 5) experiments which are less central to the paper. We have provided instructions for reproducing everything in addition to the logs though, if resources are available.
+Download VirtualBox 6.1 (tested on 6.1.38), import the `ova` file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**:
+- see the "Memory Requirements (RAM)" section above; the defaults are *not* enough to run every experiment.
+- Also note that 8 cores are necessary if you want to re-run DreamCoder baselines (given as an Appendix) but the rest of the experiments are fine on 1 core.
+- 4GB of memory and 1 CPU is enough to run all of the most important experiments, and more is only needed if you opt out of using the logged versions of ablation experiments (Claim 4) and prototype (Claim 5) experiments which are less central to the paper. We have provided full instructions for reproducing everything in addition to providing logs, if resources are available.
 
 VM Info:
 - Ubuntu 20.04
@@ -60,6 +65,7 @@ VM Info:
 - Password: `artifact`
 - Artifact repo is at `/home/artifact/stitch-artifact`
 - All dependencies are pre-installed and `stitch` is pre-compiled
+- `/home/artifact/stitch-artifact/README.md` is outdated and should either be `git pull`'d or alternatively any other README (like this one you're reading) can be used.
 
 ## Non-VM Setup
 
@@ -67,7 +73,7 @@ VM Info:
 
 The only `stitch` dependency is `rust` (tested on 1.64.0; default installation settings) which can be installed from: https://www.rust-lang.org/tools/install
 
-Additionally, for data analysis in evaluating the claims the following depencies are needed:
+For data analysis in evaluating the claims in the artifact, the following dependencies are needed:
 
 Ensure that `python3` points to an installation of Python (tested on Python 3.8.10 but most likely 3.7+ will work). Ensure that the following dependencies are install for Python:
 ```
@@ -128,7 +134,7 @@ To check that all table/figure generation results work we will now step through 
 cd stitch-artifact/stitch/experiments
 make claim-1-viz
 ```
-This should run without error and re-generate the follwoing PDFs from the paper:
+This should run without error and re-generate the following PDFs from the paper:
 - Fig 6: `stitch-artifact/stitch/experiments/plots/benches_compression_ratio_min.pdf`
 - Fig 7: `stitch-artifact/stitch/experiments/plots/benches_mem_peak_kb.pdf`
 - Fig 8: `stitch-artifact/stitch/experiments/plots/benches_time_per_inv_with_rewrite.pdf`
@@ -169,7 +175,7 @@ This should run without error. See full description of analyzing these results i
 
 PyStitch is a prototype DreamCoder-Stitch hybrid used only in Claim 5. As we discuss in the section for evaluating Claim 5, some of these runs can be memory intensive and full logs from past runs are provided as an alternative means of verification. We also highly recommend a VM if errors are encountered given that this part of the artifact is intended to be a prototype.
 
-The following command tets out the prototype PyStitch (Runtime: 4.5 min; Memory: 1.5GB)
+The following command tests out PyStitch (Runtime: 4.5 min; Memory: 1.5GB)
 ```
 cd stitch-artifact/pystitch
 make test-1
@@ -189,7 +195,7 @@ list(t0) -> t0 -> list(t1) -> list(t0) 	 #(lambda (lambda (lambda (if (empty? $0
 202.89716243743896 seconds
 ```
 
-Full output from a similar run is in `stitch-artifact/pystitch/artifact_out/base-0.stderr` for reference but in particular it should end with a time printout (without crashing). The output need not exactly match.
+Full output from a similar run is in `stitch-artifact/pystitch/artifact_out/base-0.stderr` for reference but in particular it should end with a time printout (without crashing). The output need not match exactly.
 
 # Evaluation instructions
 
@@ -203,14 +209,14 @@ make claim-1
 
 - Runtime requirement: < 1 min (Ours took 34s)
 - Memory requirement: low (Peak 200MB)
-- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expeted output log is given in `experiments/make-claim-1.log`
+- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expected output log is given in `experiments/make-claim-1.log`
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-1` will clear these outputs before re-running.
   - `make claim-1-viz` will execute just the graphing code for `claim-1` in case you encounter an error in the Python error and would like to re-run just that part of the code.
 
 ### Validating Claim 1
 
-View the following plots in `stitch/experiments/plots` to verify that they align with those in the paper. Be mindful to get the exact file name, as some additional similarly named plots are also generated. :
+View the following plots in `stitch/experiments/plots` to verify that they align with those in the paper. Be mindful to get the exact file name, as some additional similarly named plots are also generated:
 - Fig 6: `benches_compression_ratio_min.pdf`
 - Fig 7: `benches_mem_peak_kb.pdf`
 - Fig 8: `benches_time_per_inv_with_rewrite.pdf`
@@ -348,12 +354,15 @@ Runtime: 576.12354826927185
 
 Which should be similar (modulo VM performance) to the runtime in the revised Table 4 given above.
 
-This is followed by a printout of each function `FOLD` `UNFOLD` `MAP` `FILTER` and `ZIP`, where if a function with a matching type signature has been found it is printed on the line following it. We hand-checked these functions for the results in `analyze.log`. So in the above example, `FOLD` `MAP` and `ZIP` were found but `UNFOLD` and `FILTER` were not. 
+This is followed by a printout of each function `FOLD` `UNFOLD` `MAP` `FILTER` and `ZIP`, where if a function with a matching type signature has been found it is printed on the line following it. So in the above example, `FOLD` `MAP` and `ZIP` were found but `UNFOLD` and `FILTER` were not. We hand-checked the functions in `analyze.log` for correctness.
 
-Looking at the expected output table below we see that the desired output agrees with this:
+Looking at the expected output table below we see that the desired output agrees with the outputs we got above:
 ```
-Base:      Y     N     Y     N     Y
+         Fold  Unfold Map  Filter ZipWith  Time
+Base:      Y     N     Y     N     Y       503
 ```
+
+This procedure can be repeated for the next 3 rows of the table.
 
 ### Re-running Claim 5
 
@@ -366,8 +375,7 @@ make clean
 ./claim-5.sh
 ```
 
-The results will be generated in `artifact_out/` and can be validated in the same way as the pre-run results
-
+The results will be generated in `artifact_out/` and can be validated in the same way as the pre-run results.
 
 ## Appendix: Rerunning DreamCoder Baselines (expensive)
 
@@ -376,20 +384,20 @@ This section covers how to re-run the DreamCoder baselines from Claim 1. This re
 sudo apt install libzmq3-dev
 ```
 
-To re-run everything, which requires 10GB memory and takes ~1 day on 8 cores (and mileage may vary depending on VM performance):
+To re-run everything, which requires 10GB memory and takes ~1 day on 8 cores (mileage may vary depending on VM performance):
 ```
 cd stitch-artifact/stitch/experiments
 make dreamcoder
 ```
-The complete results of this are already pre-populated at `stitch-artifact/stitch/experiments/compression_benchmark` and were available at https://github.com/mlb2251/compression_benchmark as linked from the original paper.
+The complete results of this are already pre-populated at `stitch-artifact/stitch/experiments/compression_benchmark` and have been available at https://github.com/mlb2251/compression_benchmark as linked from the original paper.
 
 # Additional artifact description
 
 ## Organization of Artifact
 
-There are 4 directories at the base of this artifact:
+This artifact is a clone of the [stitch-artifact](https://github.com/mlb2251/stitch-artifact/) GitHub repository. There are 4 directories at the base of this artifact:
 - `stitch` (Claim 1 & Trying out on your own inputs)
-  - corresponds to (a commit of) the main branch of the official Stitch repo `github.com/mlb2251/stitch`
+  - corresponds to (a commit of) the main branch of the [official Stitch repo](github.com/mlb2251/stitch)
 - `stitch_experiments` (Claims 2-3)
   - adapted to support the additional analyses of the paper.
 - `stitch_ablations` (Claim 4)
@@ -430,16 +438,18 @@ Structure of `stitch` subdirectory (i.e. the official stitch repo):
 
 ## Running on your own inputs
 
-I would recommend not doing this in a VM. Go into the `stitch` subdirectory of the Artifact, where the main implementation of stitch lives.
+Go into the `stitch-artifact/stitch` subdirectory of the Artifact, where the main implementation of `stitch` lives.
 
-Lets take a look at some simple examples of the Stitch input format. Put the following in a file and name it `data/basic/ex1.json`:
+Lets take a look at some simple examples of the `stitch` input format. Put the following in a new file `data/basic/ex1.json`:
 ```json
 [
     "(foo (a a a))",
     "(bar (b b b))"
 ]
 ```
-The stitch input format is a json file containing a list of input programs, where each program is a string written in a lisp-like lambda calculus syntax. The first program in this example corresponds to the curried lambda calculus expression `(app foo (app (app a a) a))`. The clear structure in these examples is that they all contain a subterm of the form `\x. (x x x)`. Lets see if stitch can pull that out:
+As above, stitch input format is a json file containing a list of input programs, where each program is a string written in a lisp-like lambda calculus syntax. The first program in this example corresponds to the curried lambda calculus expression `(app foo (app (app a a) a))`.
+
+The clear structure in these examples is that they all contain a subterm of the form `\x. (x x x)`. Lets see if stitch can pull that out:
 
 ```
 cargo run --release --bin=compress -- data/basic/ex1.json --max-arity=3 --iterations=1
@@ -479,7 +489,7 @@ Quick primer on the output format:
 
 Now that you've had a primer lets take a look at the output of one of the benchmarks from the paper. This will be the `data/cogsci/nuts-bolts.json` file from the [Wong et al. 2022] dataset, feel free to open the file and take a look.
 
-Now lets run it:
+Now lets run it, this time using `--iterations=3` to get 3 abstractions:
 ```
 cargo run --release --bin=compress -- data/cogsci/nuts-bolts.json --max-arity=3 --iterations=3
 ```
@@ -496,7 +506,7 @@ Time: 120ms
 Wrote to "out/out.json"
 ```
 
-These are written in a low-level graphics DSL, but the first function (which gains 1.78x compression) is the function for rendering a scaled n-sided polygon, which is used 320 times in the dataset.
+These are written in a low-level graphics DSL, and the first function (which yields 1.78x compression) is the function for rendering a scaled n-sided polygon, which is used 320 times in the dataset.
 
 Aside: `stitch` can handle binders, and the syntax for lambdas and variables uses de bruijn indices like so: `(\x. \y. x y)` would be written as `(lam (lam ($1 $0)))`.
 
@@ -509,11 +519,7 @@ Troubleshooting:
 
 You can also see a full list of command-line arguments you can explore by running `cargo run --release --bin=compress -- --help`
 
-There's also a bit more information in the readme at the [official github](https://github.com/mlb2251/stitch) including some instructions for running the Python bindings (however these haven't been widely tested yet).
+There's also a bit more information in the readme at the [official github](https://github.com/mlb2251/stitch) including some instructions for running the Python bindings (however these are in development and haven't been widely tested yet).
 
-Feel free to modify examples and play around! A more complete tutorial will come out when we more officially publicize `stitch`, but I hope this was a helpful primer, and thank you for reviewing!
-
-
-
-
+Feel free to modify examples and play around! A more complete tutorial will come out when we more officially publicize `stitch`, but I hope this was a helpful primer, and thank you for reviewing - we appreciate the time and feedback!
 
