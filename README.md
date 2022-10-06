@@ -36,7 +36,7 @@ This artifact evaluates the following claims:
 
 # Download, installation, and sanity-testing instructions
 
-We provide both VM Setup and Non-VM Setup instructions below. While the tool `stitch` (i.e. Claims 1-4) has minimal dependencies, the PyStitch prototype presented in Claim 5 may require a VM due to DreamCoder dependencies. All claims can be evaluated through the VM for simplicity if preferred.
+We provide both VM Setup and Non-VM Setup instructions below. While the tool `stitch` (i.e. Claims 1-4) has minimal dependencies, the PyStitch prototype presented in Claim 5 has slightly more dependencies and might be easier run in a VM if desired. All claims can also be evaluated through the VM for simplicity preferred.
 
 ## Memory Requirements (RAM)
 
@@ -44,13 +44,13 @@ We provide both VM Setup and Non-VM Setup instructions below. While the tool `st
 - Claim 2: <1 GB
 - Claim 3: <1 GB
 - Claim 4: 50 GB (we provide full logs of a successful 20 hour run of this ablation study as an additional alternative)
-- Claim 5: 20 GB (we provide full logs of successful runs)
+- Claim 5: 20 GB (we provide full logs of successful runs of this prototype system)
 
 ## VM Setup
 
 Download the `.ova` VM image from the artifact Zenodo link.
 
-Download VirtualBox 6 and import the file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements" section above - the defaults are *not* enough to run every experiment.
+Download VirtualBox 6.1 (tested on 6.1.38), import the `ova` file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements (RAM)" section above - the defaults are *not* enough to run every experiment; also note that 8 cores are necessary if you want to re-run DreamCoder baselines (given as an Appendix) but the rest of the experiments are fine on 1 core. 4GB of memory and 1 CPU is enough to run all of the primary experiments, and more is only needed if you opt out of using the logged versions of ablation experiments (Claim 4) and prototype (Claim 5) experiments which are less central to the paper. We have provided instructions for reproducing everything in addition to the logs though, if resources are available.
 
 VM Info:
 - Ubuntu 20.04
@@ -63,7 +63,7 @@ VM Info:
 
 ### Install `stitch` dependencies
 
-The only Stitch dependency is `rust` (tested on 1.64.0; default installation settings) which can be installed from: https://www.rust-lang.org/tools/install
+The only `stitch` dependency is `rust` (tested on 1.64.0; default installation settings) which can be installed from: https://www.rust-lang.org/tools/install
 
 Additionally, for data analysis in evaluating the claims the following depencies are needed:
 
@@ -71,6 +71,9 @@ Ensure that `python3` points to an installation of Python (tested on Python 3.8.
 ```
 python3 -m pip install numpy matplotlib pandas seaborn prettytable
 ```
+(tested with `numpy==1.23.3 matplotlib==3.6.0 pandas==1.5.0 seaborn==0.12.0 prettytable==3.4.1`)
+
+Error we encountered: If you encounter the error `Error: pandas 1.5.0 has requirement python-dateutil>=...` then rerunning `python3 -m pip install pandas` resolved this.
 
 Ensure that GNU time (i.e. `/usr/bin/time`) is installed - note that this is different from the `time` bash builtin. Check that running `/usr/bin/time` prints a "Usage:" explanation.
 
@@ -94,6 +97,8 @@ pypy3 -m pip install frozendict dill
 
 ## Sanity-test (kick the tires)
 
+### Kicking Stitch's tires
+
 Build and test `stitch` with the commands below. Downloading packages and compilation will each take a handful of minutes and will constitute the bulk of the runtime, while the tests themselves will likely take less than a minute (Our test runtimes: 24s in VM; 7.4s outside of VM).
 
 ```
@@ -102,13 +107,61 @@ make build
 make test
 ```
 
+To check that all table/figure generation results work we will now step through each claim, running only the visualization step on the pre-computed results. **How to check that each visualization aligns with the paper is explained here (in addition to later in the full Evaluation instructions) but is not necessary here unless desired - the main point is to make sure there aren't any obvious data analysis crashes to catch and that plotting software works.**
+
+### Claim 1
+```
+cd stitch-artifact/stitch/experiments
+make claim-1-viz
+```
+This should run without error and re-generate the follwoing PDFs from the paper:
+- Fig 6: `stitch-artifact/stitch/experiments/plots/benches_compression_ratio_min.pdf`
+- Fig 7: `stitch-artifact/stitch/experiments/plots/benches_mem_peak_kb.pdf`
+- Fig 8: `stitch-artifact/stitch/experiments/plots/benches_time_per_inv_with_rewrite.pdf`
+
+### Claim 2
+```
+cd stitch-artifact/stitch_experiments/experiments
+export NUM_SEEDS=50
+make claim-2-viz
+```
+This should run without error and should generate and print out Table 2 from the paper. As discussed in the section `Validating Claim 2` below the Runtimes will be ~2x faster than the original results because of codebase improvements.
+
+### Claim 3
+```
+cd stitch-artifact/stitch_experiments/experiments
+make claim-3-viz
+```
+Fig 9: View the generated plot at `stitch-artifact/stitch_experiments/experiments/claim-3.pdf`. This should be identical to the one in the paper.
+
+### Claim 4
+```
+cd stitch-artifact/stitch_ablations/experiments
+make claim-4-viz
+```
+
+How to validate these results (copied from "Validating Claim 4 with pre-run results" section below):
+> Table 3: Running make claim-4-viz should have printed out Table 3 from the paper. This is expected to be deterministic as it uses the number of nodes expanded instead of the runtime. Note however that there may be nondeterminism in whether TIME or MEM is the reason for failure - in particular a faster machine may be able to use up more memory before timing out and thus a TIME may become a MEM. We find in our re-running results that are identical to the paper table except for MEM in the top leftmost cell of the table.
+
+### Claim 5
+```
+cd stitch-artifact/pystitch
+./analyze.sh
+```
+
+This should run without error. See full description of analyzing these results in "Validating Claim 5 with pre-run results" below, which is slightly more involved than the other analyses - for the purposes of kicking the tires running without error should suffice.
+
+### Kicking PyStitch's tires
+
+PyStitch is a prototype DreamCoder-Stitch hybrid used only in Claim 5. As we discuss in the section for evaluating Claim 5, some of these runs can be memory intensive and full logs from past runs are provided as an alternative means of verification. We also highly recommend a VM if errors are encountered given that this part of the artifact is intended to be a prototype.
 
 The following command tets out the prototype PyStitch (Runtime: 4.5 min; Memory: 1.5GB)
 ```
 cd stitch-artifact/pystitch
 make test-1
 ```
-The end of the output should look like:
+
+There will be a lot of output, and the end of the output should be of the form:
 ```
 new primitives:
 list(t0) -> (list(t0) -> t1) -> (t1 -> list(t0)) -> list(t0) 	 #(lambda (lambda (lambda (#(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2))))) ($0 ($1 (cdr $2))) (car $2) $2))))
@@ -122,14 +175,7 @@ list(t0) -> t0 -> list(t1) -> list(t0) 	 #(lambda (lambda (lambda (if (empty? $0
 202.89716243743896 seconds
 ```
 
-The following command will only work if you have 14 GB of RAM and is more of a stress test of the full functionality of pystitch (12 min; 14GB)
-```
-cd stitch-artifact/pystitch
-make test-2
-```
-
-Expected output should look similar to the make test-1 though not identical .
-
+Full output from a similar run is in `stitch-artifact/pystitch/artifact_out/base-0.stderr` for reference but in particular it should end with a time printout (without crashing). The output need not exactly match.
 
 # Evaluation instructions
 
@@ -198,7 +244,7 @@ make claim-3
 - Expected output: A full expected output log is given in `experiments/make-claim-3.log`
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-3` will clear these outputs before re-running.
-  - `make claim-1-viz` will execute just the graphing code for `claim-1` in case you encounter an error in the Python error and would like to re-run just that part of the code.
+  - `make claim-3-viz` will execute just the graphing code for `claim-3` in case you encounter an error in the Python error and would like to re-run just that part of the code.
 
 ### Validating Claim 3
 
@@ -230,7 +276,7 @@ Validating these results:
 
 This step will take ~20 hours and 50GB RAM.
 
-See "Pre-run files and logs" above for all expected outputs from this step.
+See "Pre-run files and logs" above for all expected outputs from this step, which may serve as an alternative if preferred.
 
 From the root of the stitch-artifact repo, run:
 ```
@@ -242,8 +288,63 @@ This will overwrite the pre-run files. Proceed to the same data analysis used du
 
 ## Claim 5
 
-### Running Claim 5
+### Validating Claim 5 with pre-run results
 
+Pre-run files and logs:
+- `stitch-artifact/pystitch/` is the parent folder for all the following files (note the difference from earlier paths in this guide).
+- `artifact_out` contains all the output data generated from running `./claim-5.sh`. This includes one file per pystitch run, all of the form `$model-$iteration.stderr` where `$model` is `base`, `bayes`, `vs`, or `bayes_vs` corresponding to the 4 rows of Table 4, and iterations range from `0` to `3` and correspond to the different historical DreamCoder iterations that the DreamCoder log files came from which are input to this. In particular, we expect to find Fold Unfold and Map at iteration 0, Filter on iteration 1, and ZipWith on iteration 3.
+- `expected_artifact_out` is a backup of `artifact_out` (in case `make clean` is run which would delete the other copy).
+- `claim-5.log` is a log of the console output from running `./claim-5.sh`.
+- `analyze.log` is a log of the console output from running `./analyze.sh`.
+
+First we note some revisions to Table 4. A small bug in the prototype was fixed which allows for finding `MAP` and `FOLD` at earlier iterations and there is no longer a "half credit" `FILTER`, while increasing runtimes (still remaining 75x faster than DreamCoder). The revised Table 4 is given below (Y/N instead of check and X):
+```
+         Fold  Unfold Map  Filter ZipWith  Time
+Base:      Y     N     Y     N     Y       503
++Bayes:    Y     N     Y     N     Y       817
++VS:       Y     Y     Y     N     Y       3231
++Bayes+VS: Y     Y     Y     Y     Y       3042
+```
+
+
+Run the analysis on the pre-run data like so:
+```
+cd stitch-artifact/pystitch
+./analyze.sh
+```
+
+The output should look like the output in `analyze.log`. In particular, `./analyze.sh` script is looking through the logs in `artifact_out/` and pulling out the relevant functions for this analysis. For each row of the table there will be a list of outputs, for example the first row is the "base" model:
+
+```
+Model: base
+Runtime: 576.12354826927185
+FOLD
+(t0 -> t1 -> t1) -> t1 -> list(t0) -> t1         #(lambda (lambda (#(lambda (lambda (fix1 $0 $1))) (lambda (lambda (if (empty? $0) $2 ($3 (car $0) ($1 (cdr $0)))))))))
+UNFOLD
+MAP
+(t0 -> t1) -> list(t0) -> list(t1)       #(lambda (#(lambda (lambda (fix1 $0 $1))) (lambda (lambda (#(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2))))) ($1 (cdr $0)) ($2 (car $0)) $0)))))
+FILTER
+ZIP
+(t0 -> t1 -> t2) -> list(t0) -> list(t1) -> list(t2)     [very long program omitted]
+```
+
+From the above log, the runtime is given by the line:
+```
+Runtime: 576.12354826927185
+```
+
+Which should be similar (modulo VM performance) to the runtime in the revised Table 4 given above.
+
+This is followed by a printout of each function `FOLD` `UNFOLD` `MAP` `FILTER` and `ZIP`, where if a function with a matching type signature has been found it is printed on the line following it. We hand-checked these functions for the results in `analyze.log`. So in the above example, `FOLD` `MAP` and `ZIP` were found but `UNFOLD` and `FILTER` were not. 
+
+Looking at the expected output table below we see that the desired output agrees with this:
+```
+Base:      Y     N     Y     N     Y
+```
+
+### Re-running Claim 5
+
+To re-run these results requires 20GB of RAM and ~2 hrs (may vary with VM performance), hence the alternative of log files from a previous run given above.
 
 From the root of the stitch-artifact repo, run:
 ```
@@ -252,27 +353,22 @@ make clean
 ./claim-5.sh
 ```
 
-113 min
-
-### Validating Claim 5
-```
-./analyze.sh
-```
+The results will be generated in `artifact_out/` and can be validated in the same way as the pre-run results
 
 
-## Appendix: Rerunning DC Baselines
+## Appendix: Rerunning DreamCoder Baselines (expensive)
 
-We'll need an extra dependency for this
+This section covers how to re-run the DreamCoder baselines from Claim 1. This relies on DreamCoder's pre-built compression binary, which runs on the VM (and may work on other Linux machines). If you aren't already in the VM you'll need an extra dependency for this (relative to a fresh Ubuntu 20.04):
 ```
 sudo apt install libzmq3-dev
 ```
 
-To re-run everything, which requires 100GB memory and takes ~1 day on 8 cores outside of a VM:
+To re-run everything, which requires 10GB memory and takes ~1 day on 8 cores (and mileage may vary depending on VM performance):
 ```
 cd stitch-artifact/stitch/experiments
 make dreamcoder
 ```
-
+The complete results of this are already pre-populated at `stitch-artifact/stitch/experiments/compression_benchmark` and were available at https://github.com/mlb2251/compression_benchmark as linked from the original paper.
 
 # Additional artifact description
 
