@@ -1,7 +1,9 @@
+**ATTENTION**: the README in the VM at `/home/artifact/stitch-artifact/README.md` may be slightly outdated due to various tweaks or additions that aren't worth re-exporting and re-uploading and re-testing the VM image (e.g. adding "Additional Artifact Description" and tweaking some instructions for ease of use). So please either `git pull` the changes into the VM or just use any of the other copies of the README (i.e. this one; the one in the base directory of Zenodo; the one in stitch-artifact.zip on Zenodo; or the one on the Github). Sorry for the inconvenience and thank you for helping review!
+
 POPL 2023 Artifact for the tool `stitch` from the paper "Top-Down Synthesis for Library Learning" (POPL 2023 Submission #278).
 
 This artifact can be downloaded from either of two places:
-- Zenodo: **TODO**
+- Zenodo: https://zenodo.org/record/7150898
 - Github: https://github.com/mlb2251/stitch-artifact
 
 Additionally a VirtualBox VM image is available at the Zenodo link above.
@@ -48,7 +50,7 @@ We provide both VM Setup and Non-VM Setup instructions below. While the tool `st
 
 ## VM Setup
 
-Download the `.ova` VM image from the artifact Zenodo link.
+Download the `.ova` VM image from the artifact [Zenodo link](https://zenodo.org/record/7150898).
 
 Download VirtualBox 6.1 (tested on 6.1.38), import the `ova` file with `File > Import Appliance`, **and be sure to adjust the allocated Memory and CPUs as appropriate**: see the "Memory Requirements (RAM)" section above - the defaults are *not* enough to run every experiment; also note that 8 cores are necessary if you want to re-run DreamCoder baselines (given as an Appendix) but the rest of the experiments are fine on 1 core. 4GB of memory and 1 CPU is enough to run all of the primary experiments, and more is only needed if you opt out of using the logged versions of ablation experiments (Claim 4) and prototype (Claim 5) experiments which are less central to the paper. We have provided instructions for reproducing everything in addition to the logs though, if resources are available.
 
@@ -79,8 +81,7 @@ Ensure that GNU time (i.e. `/usr/bin/time`) is installed - note that this is dif
 
 ### Install the `stitch` artifact
 
-**todo make stitch-artifact.zip**
-Unzip `stitch-artifact.zip` from the Zenodo link into a new folder `stitch-artifact`,  or alternatively clone `stitch-artifact` from github as follows:
+Unzip `stitch-artifact.zip` from the [Zenodo link](https://zenodo.org/record/7150898) into a new folder `stitch-artifact`,  or alternatively clone `stitch-artifact` from github as follows:
 ```
 git clone --recursive  https://github.com/mlb2251/stitch-artifact.git
 ```
@@ -97,6 +98,14 @@ pypy3 -m pip install frozendict dill
 
 ## Sanity-test (kick the tires)
 
+The artifact is split over several directories depending on the claim. Each command will be preceded by a `cd` to indicate where it is being executed, but as a quick reference here is the structure:
+- `stitch` (Claim 1)
+- `stitch_experiments` (Claims 2-3)
+- `stitch_ablations` (Claim 4)
+- `pystitch` (Claim 5)
+
+Note that `stitch` corresponds to (a commit of) the main branch of the official Stitch repo `github.com/mlb2251/stitch` while `stitch_experiments` and `stitch_ablations` are adapted versions to support the additional analyses / ablations of the paper.
+
 ### Kicking Stitch's tires
 
 Build and test `stitch` with the commands below. Downloading packages and compilation will each take a handful of minutes and will constitute the bulk of the runtime, while the tests themselves will likely take less than a minute (Our test runtimes: 24s in VM; 7.4s outside of VM).
@@ -110,6 +119,7 @@ make build
 cd ../stitch_ablations
 make build
 ```
+All builds and tests should run without error (there may be some compiler warnings on the later build commands).
 
 To check that all table/figure generation results work we will now step through each claim, running only the visualization step on the pre-computed results. **How to check that each visualization aligns with the paper is explained here (in addition to later in the full Evaluation instructions) but is not necessary here unless desired - the main point is to make sure there aren't any obvious data analysis crashes to catch and that plotting software works.**
 
@@ -129,7 +139,7 @@ cd stitch-artifact/stitch_experiments/experiments
 export NUM_SEEDS=50
 make claim-2-viz
 ```
-This should run without error and should generate and print out Table 2 from the paper. As discussed in the section `Validating Claim 2` below the Runtimes will be ~2x faster than the original results because of codebase improvements.
+This should run without error (don't forget to run the `export` statement first) and should generate and print out Table 2 from the paper. As discussed in the section `Validating Claim 2` below the Runtimes will be ~2x faster than the original results because of codebase improvements.
 
 ### Claim 3
 ```
@@ -153,7 +163,7 @@ cd stitch-artifact/pystitch
 ./analyze.sh
 ```
 
-This should run without error. See full description of analyzing these results in "Validating Claim 5 with pre-run results" below, which is slightly more involved than the other analyses - for the purposes of kicking the tires running without error should suffice.
+This should run without error. See full description of analyzing these results in "Validating Claim 5 with pre-run results" below, which is slightly more involved than the other analyses - for the purposes of kicking the tires just running without error should suffice.
 
 ### Kicking PyStitch's tires
 
@@ -165,7 +175,7 @@ cd stitch-artifact/pystitch
 make test-1
 ```
 
-There will be a lot of output, and the end of the output should be of the form:
+There will be a lot of output ("WARNING"s are okay), and the end of the output should be of the form:
 ```
 new primitives:
 list(t0) -> (list(t0) -> t1) -> (t1 -> list(t0)) -> list(t0) 	 #(lambda (lambda (lambda (#(lambda (lambda (lambda (if (empty? $0) empty (cons $1 $2))))) ($0 ($1 (cdr $2))) (car $2) $2))))
@@ -227,7 +237,6 @@ In the paper we provide means and standard deviations across many seeds - in par
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-2` will clear these outputs before re-running.
   - `make claim-2-viz` will execute just the table-making code for `claim-2` in case you encounter an error in the Python error and would like to re-run just that part of the code.
-
 
 ### Validating Claim 2
 
@@ -376,10 +385,133 @@ The complete results of this are already pre-populated at `stitch-artifact/stitc
 
 # Additional artifact description
 
+## Organization of Artifact
 
+There are 4 directories at the base of this artifact:
+- `stitch` (Claim 1 & Trying out on your own inputs)
+  - corresponds to (a commit of) the main branch of the official Stitch repo `github.com/mlb2251/stitch`
+- `stitch_experiments` (Claims 2-3)
+  - adapted to support the additional analyses of the paper.
+- `stitch_ablations` (Claim 4)
+  - adapted to support the ablations and analyses of the paper.
+- `pystitch` (Claim 5)
+  - the PyStitch prototype from Section 6.5 of the paper.
 
+Structure of `stitch` subdirectory (i.e. the official stitch repo):
+- `data` - contains json-format data used as input to stitch. `data/cogsci` contains the data used in Claims 2-4 of the paper while `data/basic` contains a inputs to test various functionality.
+- `examples/stitch.rs` - this is used to build the Python bindings for Stitch (not used in this artifact)
+- `experiments` this is where anything related to running paper experiments goes - more details given in `stitch/experiments` section below.
+  - `compression_benchmark` this is a clone of https://github.com/mlb2251/compression_benchmark which contains the DreamCoder benchmarks that we compare against in Claim 1. The README of that GitHub describes the format of the benchmark.
+  - `plots` is where the plots of Claim 1 are rendered
+  - `Makefile` - this contains commands used during the evaluation like `make claim-1` and `make claim-1-viz` (in `stitch_experiments/experiments` this file will contain commands for `claim-2` and `claim-3`, and in `stitch_ablations/experiments` this file will contain commands for `claim-4`).
+  - `analyze.py` this script does much of the data analysis work and is frequently invoked in different modes by the Makefile or bash scripts.
+  - `bench_dreamcoder.sh` this is used to run a single benchmark of DreamCoder on `compression_benchmark`.
+  - `bench_dreamcoder_all.sh` this is used to run ALL benchmarks in `compression_benchmark` by repeatedly invoking `bench_dreamcoder.sh`. This is called by `make dreamcoder`.
+  - `bench_stitch.sh` This is used for launching a single Stitch run to benchmark it against a DreamCoder run.
+  - `bench_stitch_all_latest.sh` This automates finding all the most recently generated DreamCoder runs and running Stitch against each of them
+  - `compression` This is a precompiled DreamCoder binary for running DreamCoder's abstraction learning, used by `bench_dreamcoder.sh`.
+  - `process_all.sh` This does some post-processing of stitch and dreamcoder runs that were launched by `bench_stitch.sh` and `bench_dreamcoder.sh`.
+- `src` this is the source of stitch
+  - `bin/compress.rs` this is the entrypoint for stitch when you run it in the usual manner, with `cargo run --release --bin=compress`
+  - `compression.rs` this is the main file in the Stitch codebase, where all the abstraction learning (i.e. "compression" happens)
+  - `domain.rs` this isn't used in this paper, but defines an interface for giving execution semantics to programs (see also `src/domains/` for example domains)
+  - `expr.rs` this defines expressions (the `Expr` struct) used throughout `stitch`, as well as the `Lambda` struct corresponding to a node in an expression, designed to be compatible with the `egg` library (by implementing `Language`).
+  - `extraction.rs` this is called by `compression.rs` and does the work of rewriting a program using an abstraction
+  - `formats.rs` this defines various input formats for Stitch
+  - `lib.rs` this is the toplevel library file for Stitch, it mainly just links all the other files togehter.
+  - `macros.rs` this provides helpful macros, though they're largely used by the `domain.rs` semantics extension of Stitch that isn't used in this paper.
+  - `util.rs` various utilities
+- `tests/integration_tests.rs` These are the integration tests run by `make test`. They use cached expected outputs across many simple and complex benchmarks and are automatically run by a GitHub Action to check for regressions.
+- `Makefile`
+  - `make build` this runs `cargo build --release --bin=compress` which builds stitch
+  - `make test` this runs `cargo test --release --test integration_tests` which runs the tests in `stitch/tests/integration_tests.rs`
 
+`stitch_experiments` and `stitch_ablations` mirror the structure of `stitch`. *All log files relevant to specific claims are described in the section pertaining to that claim instead of here.*
 
+## Running on your own inputs
+
+I would recommend not doing this in a VM. Go into the `stitch` subdirectory of the Artifact, where the main implementation of stitch lives.
+
+Lets take a look at some simple examples of the Stitch input format. Put the following in a file and name it `data/basic/ex1.json`:
+```json
+[
+    "(foo (a a a))",
+    "(bar (b b b))"
+]
+```
+The stitch input format is a json file containing a list of input programs, where each program is a string written in a lisp-like lambda calculus syntax. The first program in this example corresponds to the curried lambda calculus expression `(app foo (app (app a a) a))`. The clear structure in these examples is that they all contain a subterm of the form `\x. (x x x)`. Lets see if stitch can pull that out:
+
+```
+cargo run --release --bin=compress -- data/basic/ex1.json --max-arity=3 --iterations=1
+```
+
+(If you're having any trouble, check out other examples like `data/basic/simple1.json` to make sure you have the right format.)
+
+The output should look like:
+```
+=======Compression Summary=======
+Found 1 inventions
+Cost Improvement: (1.33x better) 806 -> 604
+fn_0 (1.33x wrt orig): utility: 200 | final_cost: 604 | 1.33x | uses: 2 | body: [fn_0 arity=1: (#0 #0 #0)]
+Time: 0ms
+Wrote to "out/out.json"
+```
+
+Quick primer on the output format:
+- `Cost Improvement: (1.33x better) 806 -> 604`
+  - here we see that by the cost metric (which values terminals like `foo` and `a` as `100` and nonterminals like `app` and `lam` as `1`) our programs were rewritten to be 1.33x smaller. To see the actual rewritten programs you can include `--show-rewritten` in the command and the rewritten programs will appear a few lines above the compression summary:
+    - `(foo (fn_0 a))` and `(bar (fn_0 b))`
+- `fn_0`
+  - this is the name the new primitive was assigned
+- `(1.33x wrt orig)`
+  - this is a *cumulative* measure of compression (ie "with respect to original"), so if we were learning more than one abstraction it would represent the accumulated compression over all previous abstractions
+- `utility: 200`
+  - This is the utility, which corresponds to the difference in program cost before and after rewriting.
+- `final_cost: 604`
+  - final cost of programs after rewriting
+- `1.33x`
+  - compression gained from this abstraction - again, only relevant when learning more than one abstraction
+- `uses: 2`
+  - the abstraction is used twice in the set of programs
+- `body: [fn_0 arity=1: (#0 #0 #0)]`
+  - this is the abstraction itself! `(#0 #0 #0)` is equivalent to `\x. (x x x)` - the first abstraction variable is always `#0`, the second is `#1`, etc.
+  - Theres also a more complete output that is sent to `out/out.json` by default and can be consumed by other programs that are using stitch as a subroutine (if they arent using the Rust/Python bindings for it).
+
+Now that you've had a primer lets take a look at the output of one of the benchmarks from the paper. This will be the `data/cogsci/nuts-bolts.json` file from the [Wong et al. 2022] dataset, feel free to open the file and take a look.
+
+Now lets run it:
+```
+cargo run --release --bin=compress -- data/cogsci/nuts-bolts.json --max-arity=3 --iterations=3
+```
+
+The output should end with the following compression summary:
+```
+=======Compression Summary=======
+Found 3 inventions
+Cost Improvement: (6.06x better) 1919558 -> 316890
+fn_0 (1.78x wrt orig): utility: 837792 | final_cost: 1079238 | 1.78x | uses: 320 | body: [fn_0 arity=2: (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi #1))))) #1 (M 1 (/ (* 2 pi) #1) 0 0)) (M #0 0 0 0))]
+fn_1 (3.81x wrt orig): utility: 572767 | final_cost: 503538 | 2.14x | uses: 190 | body: [fn_1 arity=3: (repeat (T (T #2 (M 0.5 0 0 0)) (M 1 0 (* #1 (cos (/ pi 4))) (* #1 (sin (/ pi 4))))) #0 (M 1 (/ (* 2 pi) #0) 0 0))]
+fn_2 (6.06x wrt orig): utility: 185436 | final_cost: 316890 | 1.59x | uses: 168 | body: [fn_2 arity=1: (T (T c (M 2 0 0 0)) (M #0 0 0 0))]
+Time: 120ms
+Wrote to "out/out.json"
+```
+
+These are written in a low-level graphics DSL, but the first function (which gains 1.78x compression) is the function for rendering a scaled n-sided polygon, which is used 320 times in the dataset.
+
+Aside: `stitch` can handle binders, and the syntax for lambdas and variables uses de bruijn indices like so: `(\x. \y. x y)` would be written as `(lam (lam ($1 $0)))`.
+
+Note that you don't need to pre-define a DSL or anything to work with stitch. Any space-separated series of tokens that isn't reserved for something else is treated as a DSL primitive, like `foo` and `a` in the earlier example or any of the primitive likes `T` or `-0.5` in the second example.
+
+Troubleshooting:
+- if you get an error about `unrecognized post-s-expression data` then dont forget a top level pair of parentheses around your program! Because of an s-expression library limitation `foo a b` is not a valid program but `(foo a b)` is.
+- be sure to balance your parentheses :)
+- check out other examples in `data/basic` and `data/cogsci`
+
+You can also see a full list of command-line arguments you can explore by running `cargo run --release --bin=compress -- --help`
+
+There's also a bit more information in the readme at the [official github](https://github.com/mlb2251/stitch) including some instructions for running the Python bindings (however these haven't been widely tested yet).
+
+Feel free to modify examples and play around! A more complete tutorial will come out when we more officially publicize `stitch`, but I hope this was a helpful primer, and thank you for reviewing!
 
 
 
