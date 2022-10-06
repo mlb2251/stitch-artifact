@@ -105,6 +105,10 @@ Build and test `stitch` with the commands below. Downloading packages and compil
 cd stitch-artifact/stitch
 make build
 make test
+cd ../stitch_experiments
+make build
+cd ../stitch_ablations
+make build
 ```
 
 To check that all table/figure generation results work we will now step through each claim, running only the visualization step on the pre-computed results. **How to check that each visualization aligns with the paper is explained here (in addition to later in the full Evaluation instructions) but is not necessary here unless desired - the main point is to make sure there aren't any obvious data analysis crashes to catch and that plotting software works.**
