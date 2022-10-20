@@ -209,7 +209,7 @@ make claim-1
 
 - Runtime requirement: < 1 min (Ours took 34s)
 - Memory requirement: low (Peak 200MB)
-- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expected output log is given in `experiments/make-claim-1.log`
+- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expected output log is given in `experiments/make-claim-1.log`. Note that timing/memory information has been manually appended to this log file for reference.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-1` will clear these outputs before re-running.
   - `make claim-1-viz` will execute just the graphing code for `claim-1` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -239,7 +239,7 @@ In the paper we provide means and standard deviations across many seeds - in par
 
 - Runtime requirement: 3 min * NUM_SEEDS (i.e. ranges from 9 min to 150 min).
 - Memory requirement: 1 GB (expected peak at around 800MB).
-- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively.
+- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively. Note that timing/memory information has been manually appended to these log files for reference.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-2` will clear these outputs before re-running.
   - `make claim-2-viz` will execute just the table-making code for `claim-2` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -260,7 +260,7 @@ make claim-3
 
 - Runtime requirement: ~1 min (Ours took 57s)
 - Memory requirement: Peak 463MB
-- Expected output: A full expected output log is given in `experiments/make-claim-3.log`
+- Expected output: A full expected output log is given in `experiments/make-claim-3.log`.  Note that timing/memory information has been manually appended to this log file for reference.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-3` will clear these outputs before re-running.
   - `make claim-3-viz` will execute just the graphing code for `claim-3` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -280,7 +280,7 @@ Pre-run files and logs:
 - `claim-4-out` contains the output from running the ablation study. This includes subfolder `stdout` with the logs of what stitch printed during each ablation run, as well as the subfolder `raw` which includes the jsons that stitch outputted with results from each run.
 - `expected-claim-4-out` is a backup of `claim-4-out` (in case `make clean` or `make claim-4` is run which would overwrite the other copy).
 - `make-claim-4-viz.log` is a log of the output from running `make claim-4-viz`.
-- `make-claim-4.log` is a log of the output from running `make claim-4`
+- `make-claim-4.log` is a log of the output from running `make claim-4`.  Note that timing/memory information has been manually appended to this log file for reference.
 
 Generating table from pre-run files:
 ```
@@ -508,13 +508,12 @@ Wrote to "out/out.json"
 
 These are written in a low-level graphics DSL, and the first function (which yields 1.78x compression) is the function for rendering a scaled n-sided polygon, which is used 320 times in the dataset.
 
-Aside: `stitch` can handle binders, and the syntax for lambdas and variables uses de bruijn indices like so: `(\x. \y. x y)` would be written as `(lam (lam ($1 $0)))`.
-
-Note that you don't need to pre-define a DSL or anything to work with stitch. Any space-separated series of tokens that isn't reserved for something else is treated as a DSL primitive, like `foo` and `a` in the earlier example or any of the primitive likes `T` or `-0.5` in the second example.
-
-Troubleshooting:
-- if you get an error about `unrecognized post-s-expression data` then dont forget a top level pair of parentheses around your program! Because of an s-expression library limitation `foo a b` is not a valid program but `(foo a b)` is.
-- be sure to balance your parentheses :)
+Quick primer on input format:
+- Variables should be written as *de Bruijn* indices (i.e. `$i` refers to the variable bound by the `i`th lambda above it) so `\x. \y. x y` is written `(lam (lam ($1 $0)))`
+- Lambdas need explicit parentheses around their body so `(lam + 3 2)` should instead be written `(lam (+ 3 2))`. The parser outputs an error message explaining this if you make this mistake.
+- There should be parentheses around the whole program at the outermost level so `lam (+ 3 2)` should instead be written `(lam (+ 3 2))` and `+ foo bar` should be written `(+ foo bar)`. The parser will otherwise output an error about `unrecognized post-s-expression data`.
+- Be sure to balance your parentheses or you'll get an error about `unexpected eof` or `unrecognized post-s-expression data`.
+- You don't need to pre-define a DSL or anything to work with stitch. Any space-separated series of tokens that isn't reserved for something else is treated as a DSL primitive, like `foo` and `a` in the earlier example or any of the primitive likes `T` or `-0.5` in the second example.
 - check out other examples in `data/basic` and `data/cogsci`
 
 You can also see a full list of command-line arguments you can explore by running `cargo run --release --bin=compress -- --help`
