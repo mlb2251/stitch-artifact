@@ -209,7 +209,7 @@ make claim-1
 
 - Runtime requirement: < 1 min (Ours took 34s)
 - Memory requirement: low (Peak 200MB)
-- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expected output log is given in `experiments/make-claim-1.log`. Note that timing/memory information has been manually appended to this log file for reference.
+- Expected output: This will produce a large amount of output quickly as many stitch runs are launched serially. A full expected output log is given in `experiments/make-claim-1.log`. Note that timing/memory information has been appended to this log file for reference, as this was generated via `/usr/bin/time -v make claim-1 &> make-claim-1.log`.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-1` will clear these outputs before re-running.
   - `make claim-1-viz` will execute just the graphing code for `claim-1` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -239,7 +239,7 @@ In the paper we provide means and standard deviations across many seeds - in par
 
 - Runtime requirement: 3 min * NUM_SEEDS (i.e. ranges from 9 min to 150 min).
 - Memory requirement: 1 GB (expected peak at around 800MB).
-- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively. Note that timing/memory information has been manually appended to these log files for reference.
+- Expected output: Full expected output logs for 3 seeds and 50 seeds are given in `experiments/make-claim-2-3.log` and `experiments/make-claim-2-50.log` respectively. Note that as with claim 1 the timing/memory information has been appended to these log files for reference.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-2` will clear these outputs before re-running.
   - `make claim-2-viz` will execute just the table-making code for `claim-2` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -260,7 +260,7 @@ make claim-3
 
 - Runtime requirement: ~1 min (Ours took 57s)
 - Memory requirement: Peak 463MB
-- Expected output: A full expected output log is given in `experiments/make-claim-3.log`.  Note that timing/memory information has been manually appended to this log file for reference.
+- Expected output: A full expected output log is given in `experiments/make-claim-3.log`.  Note that as with claim 1, timing/memory information has been appended to this log file for reference.
 - Comments:
   - expected plots and other outputs are prepopulated in the artifact, however `make claim-3` will clear these outputs before re-running.
   - `make claim-3-viz` will execute just the graphing code for `claim-3` in case you encounter an error in the Python error and would like to re-run just that part of the code.
@@ -280,7 +280,7 @@ Pre-run files and logs:
 - `claim-4-out` contains the output from running the ablation study. This includes subfolder `stdout` with the logs of what stitch printed during each ablation run, as well as the subfolder `raw` which includes the jsons that stitch outputted with results from each run.
 - `expected-claim-4-out` is a backup of `claim-4-out` (in case `make clean` or `make claim-4` is run which would overwrite the other copy).
 - `make-claim-4-viz.log` is a log of the output from running `make claim-4-viz`.
-- `make-claim-4.log` is a log of the output from running `make claim-4`.  Note that timing/memory information has been manually appended to this log file for reference.
+- `make-claim-4.log` is a log of the output from running `make claim-4`.  Note that as with claim 1, the timing/memory information has been appended to this log file for reference.
 
 Generating table from pre-run files:
 ```
