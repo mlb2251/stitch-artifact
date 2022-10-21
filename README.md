@@ -91,7 +91,7 @@ Unzip `stitch-artifact.zip` from the [Zenodo link](https://zenodo.org/record/715
 ```
 git clone --recursive  https://github.com/mlb2251/stitch-artifact.git
 ```
-If you did a normal clone without `--recursive`, run `git submodules update --init --recursive` to update the submodules.
+If you did a normal clone without `--recursive`, run `git submodule update --init --recursive` to update the submodules.
 
 ### Install PyStitch dependencies (Claim 5 only)
 PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any issues are encountered running it outside of a VM, we recommend using a VM for simplicity.
