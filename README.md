@@ -91,7 +91,7 @@ Unzip `stitch-artifact.zip` from the [Zenodo link](https://zenodo.org/record/715
 ```
 git clone --recursive  https://github.com/mlb2251/stitch-artifact.git
 ```
-If you did a normal clone without `--recursive`, run `git submodules update --init --recursive` to update the submodules.
+If you did a normal clone without `--recursive`, run `git submodule update --init --recursive` to update the submodules.
 
 ### Install PyStitch dependencies (Claim 5 only)
 PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any issues are encountered running it outside of a VM, we recommend using a VM for simplicity.
@@ -99,7 +99,7 @@ PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any is
 Running PyStitch on a fresh installation of Ubuntu 20.04 LTS requires the following dependencies:
 ```
 sudo apt install python3-pip pypy3
-pypy3 -m pip install frozendict dill
+pypy3 -m pip install frozendict dill colorama
 ```
 
 ## Sanity-test (kick the tires)
