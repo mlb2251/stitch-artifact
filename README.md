@@ -99,7 +99,7 @@ PyStitch is a prototype DreamCoder-Stitch hybrid only used in Claim 5. If any is
 Running PyStitch on a fresh installation of Ubuntu 20.04 LTS requires the following dependencies:
 ```
 sudo apt install python3-pip pypy3
-pypy3 -m pip install frozendict dill
+pypy3 -m pip install frozendict dill colorama
 ```
 
 ## Sanity-test (kick the tires)
