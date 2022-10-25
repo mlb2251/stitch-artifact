@@ -83,7 +83,12 @@ python3 -m pip install numpy matplotlib pandas seaborn prettytable
 
 Error we encountered: If you encounter the error `Error: pandas 1.5.0 has requirement python-dateutil>=...` then rerunning `python3 -m pip install pandas` resolved this.
 
-Ensure that GNU time (i.e. `/usr/bin/time`) is installed - note that this is different from the `time` bash builtin. Check that running `/usr/bin/time` prints a "Usage:" explanation.
+Ensure that GNU time (i.e. `/usr/bin/time -v` on Linux or `gtime -v` on OS X) is installed - note that this is different from the `time` Bash builtin.
+
+OS X actually places a copy of the Bash built-in in at `/usr/bin/time` so you need to install `gtime` with `brew install gnu-time` instead.
+
+For Linux, check that running `/usr/bin/time -v echo test` prints a lot of statistics about timing/memory.
+For OS X, check that running `gtime -v echo test` prints a lot of statistics about timing/memory.
 
 ### Install the `stitch` artifact
 
