@@ -1,12 +1,6 @@
-**Please Note**: the README in the VM at `/home/artifact/stitch-artifact/README.md` is slightly outdated due to various tweaks or additions, including clarifying parts of the instructions and providing the "Additional Artifact Description". So for a smooth evaluation please either `git pull` the changes into the VM or just use any of the other copies of the README: the copy you're reading now; or the one in the base directory of Zenodo; or the one in stitch-artifact.zip on Zenodo; or the one on the [official artifact Github](https://github.com/mlb2251/stitch-artifact/). Sorry for the inconvenience and thank you for helping review!
+This is the official Artifact for reproducing the results of the paper "Top-Down Synthesis for Library Learning" (POPL 2023). This artifact has been accepted as Reusable
 
-This is the POPL 2023 Artifact for the tool `stitch` from the paper "Top-Down Synthesis for Library Learning" (Submission #278).
-
-This artifact can be downloaded from either of two places:
-- Zenodo: https://zenodo.org/record/7150898
-- Github: https://github.com/mlb2251/stitch-artifact
-
-Additionally a VirtualBox VM image is available at the Zenodo link above.
+Additionally a VirtualBox VM image for the artifact is available at the [Zenodo link](https://zenodo.org/record/7150898), however for most use-cases this GitHub repo will be preferable. The contents of this repo are also present at the Zenodo link, but may be less updated than the GitHub repo.
 
 # List of Claims
 This artifact evaluates the following claims, taken verbatim from the start of Section 6:
@@ -526,6 +520,4 @@ Quick primer on input format:
 You can also see a full list of command-line arguments you can explore by running `cargo run --release --bin=compress -- --help`
 
 There's also a bit more information in the readme at the [official github](https://github.com/mlb2251/stitch) including some instructions for running the Python bindings (however these are in development and haven't been widely tested yet).
-
-Feel free to modify examples and play around! A more complete tutorial will come out when we more officially publicize `stitch`, but I hope this was a helpful primer, and thank you for reviewing - we appreciate the time and feedback!
 
